@@ -7,7 +7,7 @@ Without further ado, let’s get right into it.
 First off, PCA is a dimensionality reduction method, more simply, the method for summarizing multiple of characteristics(variables) into few characteristics. Suppose, we attempt to classify, or identify new unknown animal as a ‘dog’ or a ‘cat’, you would need to measure the animal’s characteristics, such as ‘Height’ and ‘Weight’. We can also classify them as ‘color’, ‘shape’, ‘agility’… etc., however, the problem are that animals have tons of characteristics, so we cannot classify them more than three characteristics. More importantly, what if we have 100 *100 characteristics of animals. We cannot compute that much data, however, we can reduce the characteristics into fewer characteristics(known as Principle component), say two or three.
 
 
-PCA describe multiple variable with fewer Principal Components
+![PCA describe multiple variable with fewer Principal Components](img/pca_concept.png) 
 Alright, better to implement PCA to get the image. Let’s start by making 5 *10 matrix, and take steps of the process.
 
 
@@ -20,11 +20,12 @@ The column are variables (characteristics) and the row are samples(say, ‘cat�
 What we want to do with this matrix is to get eigenvalues and eigenvectors, which turns to be new variable(Principal Component) to describe samples. Let matrix X to be n *p size, then p *p covariance matrix C, where C=XᵀX. Since covariance matrix is hermitian matrix and semi-positive definite matrix, by using spectral theorem, we can get eigenvalues(L: a diagonal matrix with eigenvalues λᵢ) and eigenvectors(V) from C=VLVᵀ. Let’s get a covariance matrix and eigenvalues. But before that, don’t forget to subtract means of each column from the same column.
 
 
-Means of each columns
+![Means of each columns](img/means_of_columns.png) 
 X -= X.mean(axis=0)
 C = np.cov(X,rowvar=False)
 
-10 *10 Covariance Matrix
+
+![10 *10 Covariance Matrix](img/10x10_ovariance_matrix.png) 
 We set rowvar=Flase, so that the relationship is transposed: each column represents a variable, while the rows contain observations. Then, we get eigenvalues in w and eigenvectors in v.
 
 from numpy import linalg as LA
@@ -34,7 +35,7 @@ w, v = w[w_], v[:, w_]
 At this point, the eigenvectors is 10 *10 matrix. To perform dimensionality reduction from 10 variables to 2 variables, we truncate the matrix.
 
 
-10 *2 Eigenvectors (Principal components)
+![10 *2 Eigenvectors (Principal components)](img/10x2_eigenvectors.png)
 n=2;
 n_PC = v[:, 0:n]
 Then, we want to transform( project X on the principal axes) the original 10 *10 sample into new space (2 dimensions), we use the equation T=X W.
@@ -74,7 +75,7 @@ arrowprops = dict(arrowstyle='->', linewidth=2,
 shrinkA=0, shrinkB=0, color='red', alpha=0.5)
 ax.annotate('', xy = end, xytext = start, arrowprops=arrowprops)
 
-Original sample plot(Fig. left) and plot eigenvectors(Fig. right)
+![Original sample plot(Fig. left) and plot eigenvectors(Fig. right)](img/statterplot_n_e_vectors.png)
 Let’s plot transformed samples as well.
 
 T = X.dot(v) # Projecting sample data
@@ -98,7 +99,7 @@ dir_[0] = -dir_[0]
 start = X_mean; end = start + dir_
 ax.annotate('', xy = end, xytext = start, arrowprops=arrowprops)
 
-Plot transformed sample data
+![Plot transformed sample data](img/plot_transformed_sampledata.png)
 As we can see, the two principal components are orthogonal, since they are decorrelated by PCA so that variables are independent each other.
 
 Also sample data is transformed (scattered evenly) along with two principal axes.
@@ -127,7 +128,7 @@ arrowprops = dict(arrowstyle='->',linewidth=2,
 shrinkA=0, shrinkB=0, color='red', alpha=0.5)
 ax.annotate('', xy=end, xytext=start, arrowprops=arrowprops)
 
-PCA with SVD
+![PCA with SVD](img/pca_w_svd.png)
 From this results, we see exactly the same principal components by means of SVD and Eigendecomposition.
 
 One might would like to observe how far each point from the center. As one of ways to do is to draw an equiprobability, or an error eclipse. This is especially helpful to see the sample which is in the middle of two groups, for instance, we can use this for K-means clustering.
@@ -148,11 +149,10 @@ ell.set_clip_box(ax.bbox)
 ax.add_artist(ell)
 # Or ax.add_patch(Ellipse(*args,**kwargs)) instead
 
-Equiprobability: ecliptic error circle
+![Equiprobability: ecliptic error circle](img/equiprobability.png)
 We start with import modules. Then, we want to decompose the covariance matrix of an original sample with SVD. The unitary matrix U_ is used for rotation the sample data, now we use U_[0] and U_[1], cosine, sine, respectively, so that we can get tangent for calculating
 
-
-The angle between X and PC1
+![The angle between X and PC1](img/angle_bw_x_n_pc1.png)
 the angle. The angle is from x axis. When axes are defined by the standard deviation, the eclipse is defined by the equation, (x/σ₁)²+(y/σ₂)²=s, where σ₁ is a standard deviation of x axis, σ₂ is a standard deviation of y axis, and s is a variance of the sample.
 
 x=2σ₁√s means one standard deviation. We plot three times in the code above.
@@ -183,13 +183,12 @@ arrowprops = dict(arrowstyle='->',linewidth=2,
 shrinkA=0, shrinkB=0, color='red', alpha=0.5)
 ax.annotate('', xy=end, xytext=start, arrowprops=arrowprops)
 
-PCA with Scikit-learn version
+![PCA with Scikit-learn version](img/e_vectors_scikit_learn.png)
 Not to mention, the result is the same.
 
 As we can see above code, we can access the largest eigenvectors via components_ and eigenvalues via explained_variance_.
 
-
-explained_variance_
+![explained_variance_](img/explained_variance_.png)
 Let’s take a look at the explained_variance_
 
 Major principal component explains 97.6% [0.7625315/(0.7625315+0.0184779)] of sample data and second principal component does the rest. That means that we can almost describe original data without second principal component. Scikit-learn already calculates the explained variance radio, so we can use via explained_variance_ratio_.
@@ -205,7 +204,7 @@ plt.plot(np.cumsum(pca.explained_variance_ratio_),'o-', c='#663399', alpha=.5)
 plt.xlabel('Number of components')
 plt.ylabel('Cumulative explained variance')
 
-Accuracy vs. number of components
+![Accuracy vs. number of components](img/10pcs_plot.png)
 As it turns out, it described 72~73% of sample instead of using 64 dimensions that ensures 100% of accuracy. Notice that in the left graph the first component is index 0, that’s why the graph begins from 14~15% of variance.
 
 Suppose how many of components should be needed to get 90% of accuracy then? We can blank the PCA function and to plot the graph first.
@@ -215,31 +214,33 @@ plt.plot(np.cumsum(pca.explained_variance_ratio_),'o-', c='#663399', alpha=.5)
 plt.xlabel('Number of components')
 plt.ylabel('Cumulative explained variance')
 
+![allpcs_plot](img/allpcs_plot.png)
 We would interpret around 20 components should be good enough for 90% of variance. The simpler way for this is to add the digit into the function directly.
 
 pca = PCA(.9)
 For further understandings, let’s inverse the transformed sample data into original data, and apply heatmap to them. We should observe that the more the number of components is, the more precise it creates sample data.
 
-
-Heatmap 1: original data
+![Heatmap 1: original data](img/headmap_original.png)
 # Heatmap 1
 sns.heatmap(digits.data, cbar=False)
 
-Heatmap 2: two principal components
+![Heatmap 2: two principal components](img/heatmap_pc2.png)
 # Heatmap 2
 pca = PCA(2)
 PC=pca.fit_transform(digits.data)
 inversed=pca.inverse_transform(PC)
 sns.heatmap(inversed, cbar=False
 
-Heatmap 3: twenty principal components
+![Heatmap 3: twenty principal components](img/heatmap_pc20.png)
 
-Heatmap 4: forty principal components
 # Heatmap 3
 pca = PCA(20)
 PC=pca.fit_transform(digits.data)
 inversed=pca.inverse_transform(PC)
 sns.heatmap(inversed, cbar=False)
+
+![Heatmap 4: forty principal components](img/heatmap_pc40.png)
+
 # Heatmap 4
 pca = PCA(40)
 PC=pca.fit_transform(digits.data)
@@ -256,7 +257,7 @@ for i, ax in enumerate(axes.flat):
 ax.imshow(digits.data[i].reshape(8, 8),
 cmap='binary', interpolation='nearest', clim=(0, 16))
 
-Digits from original sample
+![Digits from original sample](img/digit_originalsamples.png)
 Let’s make these digits images rougher, or more precisely, once perform dimensionality reduction and inverse the digits image to the original size.
 
 pca = PCA(2)
@@ -269,7 +270,7 @@ for i, ax in enumerate(axes.flat):
 ax.imshow(inversed[i].reshape(8, 8),
 cmap='binary', interpolation='nearest', clim=(0, 16))
 
-Reconstructed digits images
+![Reconstructed digits images](img/digit_2pcs.png)
 We can also apply PCA to Eigenfaces, since its feature is only brightness like digits image above. In terms of reconstructing the original data, we take a slightly different step from digits reconstruction. Since we need an average face first. After inverting transformed data, we add the average face. Suppose we want an inversed face image X, X is described as X=μ+w₁*v₁+w₂*v₂+…+wᵢ*vᵢ, where μ is a mean, (w₁, w₂,…,wᵢ|wᵢ∈ US) are principal components, and (v₁, v₂,…,vᵢ| vᵢ∈ V) are Eigenvectors.
 
 from sklearn.datasets import fetch_lfw_people
@@ -289,7 +290,7 @@ for i in range(5, 10):
 ax[0, i-5].imshow(faces.data[i].reshape(62, 47), cmap='binary_r')
 ax[1, i-5].imshow(inversed_faces[i].reshape(62, 47), cmap='binary_r')
 
-Full dimension(Fig. above) and 100 dimensions(Fig. below)
+![Full dimension(Fig. above) and 100 dimensions(Fig. below)](img/reconstructed_faceimg_w_100dims_pca.png)
 As we discussed before, SVD well performs when the dimensions are vast. For instance, these image is 62 *47 = 2914 dimensions. We need to compute the 2914 *2914 dimensions of the correlation matrix if we use Eigendecomopsition. Instead, SVD can calculation by sample size * sample size.
 
 truncated = faces.data[:500] # 500 *2914 Matrix
@@ -315,13 +316,12 @@ for i in range(5, 10):
 ax[0, i-5].imshow(faces.data[i].reshape(62,47), cmap='binary_r')
 ax[1, i-5].imshow(X[i].reshape(62,47), cmap='binary_r')
 
-Reconstructed face images with SVD(Fig. below)
+![Reconstructed face images with SVD(Fig. below)](img/reconstructed_faceimg_w_svd.png)
 The resulting images are not as blur as the prior scikit-learn method. Seeming to be better method, the fewer data we use, the more clear projected images are. This is because less noises from samples, and the machine uses less filters. This will lead itself to predict low for new images, which the machine has never seen before.
 
 Eigenvectors that composes these faces are called Eiganface, each Eigenvector has a unique mask.
 
-
-The first five(most biggest) Eigenfaces
+![The first five(most biggest) Eigenfaces](img/eigenfaces.png)
 N=5
 fig, ax = plt.subplots(1, N, figsize=(5, 2.5),
 subplot_kw={'xticks':[], 'yticks':[]},
@@ -329,13 +329,14 @@ gridspec_kw=dict(hspace=0.1, wspace=0.1))
 for i in range(1, N+1):
 ax[i-1].imshow(Vt[i].reshape(62, 47), cmap='binary_r')
 
-Average face
+![Average face](img/averageface.png)
 The average face is a foundation of face images.
 
 Here is the overview of SVD’s process for Eigenface.
 
 
-SVD overview
+![SVD overview](overview_of_svd_process.png)
+
 Reference
 
 [Relationship between SVD and PCA. How to use SVD to perform PCA?](https://stats.stackexchange.com/questions/134282/relationship-between-svd-and-pca-how-to-use-svd-to-perform-pca/)
@@ -343,24 +344,25 @@ Reference
 Principal component analysis (PCA) is usually explained via an eigen-decomposition of the covariance matrix. However…
 stats.stackexchange.com    
 
-Making sense of principal component analysis, eigenvectors & eigenvalues
 
+[Making sense of principal component analysis, eigenvectors & eigenvalues](https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues)
 In today’s pattern recognition class my professor talked about PCA, eigenvectors &amp; eigenvalues. I got the…
 stats.stackexchange.com    
 
 
-How to draw an error ellipse representing the covariance matrix?
-
+[How to draw an error ellipse representing the covariance matrix?](http://www.visiondummy.com/2014/04/draw-error-ellipse-representing-covariance-matrix/)
 In this post, I will show how to draw an error ellipse, a.k.a. confidence ellipse, for 2D normally distributed data…
 www.visiondummy.com    
-Feature extraction using PCA — Computer vision for dummies
+
+[Feature extraction using PCA — Computer vision for dummies](http://www.visiondummy.com/2014/05/feature-extraction-using-pca/)
 
 In this article, we discuss how Principal Component Analysis (PCA) works, and how it can be used as a dimensionality…
-Principal Component Analysis (PCA) for Feature Selection and some of its Pitfalls
 
-A typical approach in Data Science is what I call featurization of the Universe. What I mean by that is that we extract…
-jotterbach.github.io    
-Eigenfaces — Scholarpedia
-
+[Eigenfaces — Scholarpedia](http://www.scholarpedia.org/article/Eigenfaces#fig:PIE.jpg)
 The eigenfaces may be considered as a set of features which characterize the global variation among face images. Then…
 www.scholarpedia.org    
+
+[Principal Component Analysis (PCA) for Feature Selection and some of its Pitfalls](http://jotterbach.github.io/2016/03/24/Principal_Component_Analysis/)
+
+A typical approach in Data Science is what I call featurization of the Universe. What I mean by that is that we extract…
+jotterbach.github.io 
