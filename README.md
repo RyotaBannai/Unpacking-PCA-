@@ -8,18 +8,21 @@ Without further ado, let’s get right into it.
 
 First off, PCA is a dimensionality reduction method, more simply, the method for summarizing multiple of characteristics(variables) into few characteristics. Suppose, we attempt to classify, or identify new unknown animal as a ‘dog’ or a ‘cat’, you would need to measure the animal’s characteristics, such as ‘Height’ and ‘Weight’. We can also classify them as ‘color’, ‘shape’, ‘agility’… etc., however, the problem are that animals have tons of characteristics, so we cannot classify them more than three characteristics. More importantly, what if we have 100 *100 characteristics of animals. We cannot compute that much data, however, we can reduce the characteristics into fewer characteristics(known as Principle component), say two or three.
 
-<img src="img/pca_concept.png" alt="PCA describe multiple variable with fewer Principal Components" title="PCA describe multiple variable with fewer Principal Components" style="max-width:100%;">
-<p>PCA describe multiple variable with fewer Principal Components</p>
+<img src="img/pca_concept.png" style="max-width:100%;">
+<p style="text-align: center;color: #333;margin: -10px 0 0 0;">PCA describe multiple variable with fewer Principal Components</p>
 <hr class="section-divider"></hr>
 Alright, better to implement PCA to get the image. Let’s start by making 5 *10 matrix, and take steps of the process.
 
-
-![Matrix X](img/matrix_x.png) 
-<br />
+<div style='display:flex'>
+<img src="img/matrix_x.png" style="width: 60%;">
+<span>
 ```python
 import numpy as np
 X = np.random.rand(5,10)
 ```
+</span>
+<br />
+
 The column are variables (characteristics) and the row are samples(say, ‘cat’ or ‘dog’).
 
 What we want to do with this matrix is to get eigenvalues and eigenvectors, which turns to be new variable(Principal Component) to describe samples. Let matrix X to be n *p size, then p *p covariance matrix C, where C=XᵀX. Since covariance matrix is hermitian matrix and semi-positive definite matrix, by using spectral theorem, we can get eigenvalues(L: a diagonal matrix with eigenvalues λᵢ) and eigenvectors(V) from C=VLVᵀ. Let’s get a covariance matrix and eigenvalues. But before that, don’t forget to subtract means of each column from the same column.
