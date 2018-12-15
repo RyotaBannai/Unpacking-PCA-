@@ -1,3 +1,4 @@
+(setq markdown-css-paths '("custom.css"))
 <hr class="section-divider"></hr>
 Despite the fact ample of resources for PCA(Principal component analysis) on the internet, it is intractable to grab whole idea within few hours, let alone implementing that into codes with knowing what we are actually doing. Having said that, we wish we could get the feeling that we can apply PCA into real cases quickly.
 
@@ -8,7 +9,7 @@ Without further ado, let’s get right into it.
 
 First off, PCA is a dimensionality reduction method, more simply, the method for summarizing multiple of characteristics(variables) into few characteristics. Suppose, we attempt to classify, or identify new unknown animal as a ‘dog’ or a ‘cat’, you would need to measure the animal’s characteristics, such as ‘Height’ and ‘Weight’. We can also classify them as ‘color’, ‘shape’, ‘agility’… etc., however, the problem are that animals have tons of characteristics, so we cannot classify them more than three characteristics. More importantly, what if we have 100 *100 characteristics of animals. We cannot compute that much data, however, we can reduce the characteristics into fewer characteristics(known as Principle component), say two or three.
 
-![PCA describe multiple variable with fewer Principal Components](img/pca_concept.png) 
+![PCA describe multiple variable with fewer Principal Components](img/pca_concept.png "PCA describe multiple variable with fewer Principal Components") 
 <hr class="section-divider"></hr>
 Alright, better to implement PCA to get the image. Let’s start by making 5 *10 matrix, and take steps of the process.
 
@@ -239,7 +240,7 @@ plt.ylabel('Cumulative explained variance')
 ```
 
 ![Accuracy vs. number of components](img/10pcs_plot.png)
-As it turns out, it described 72~73% of sample instead of using 64 dimensions that ensures 100% of accuracy. Notice that in the left graph the first component is index 0, that’s why the graph begins from 14~15% of variance.
+As it turns out, it described 72\~73% of sample instead of using 64 dimensions that ensures 100% of accuracy. Notice that in the left graph the first component is index 0, that’s why the graph begins from 14\~15% of variance.
 
 Suppose how many of components should be needed to get 90% of accuracy then? We can blank the PCA function and to plot the graph first.
 
@@ -267,8 +268,8 @@ sns.heatmap(digits.data, cbar=False)
 ```python
 # Heatmap 2
 pca = PCA(2)
-PC=pca.fit_transform(digits.data)
-inversed=pca.inverse_transform(PC)
+PC = pca.fit_transform(digits.data)
+inversed = pca.inverse_transform(PC)
 sns.heatmap(inversed, cbar=False
 ```
 
@@ -277,8 +278,8 @@ sns.heatmap(inversed, cbar=False
 ```python
 # Heatmap 3
 pca = PCA(20)
-PC=pca.fit_transform(digits.data)
-inversed=pca.inverse_transform(PC)
+PC = pca.fit_transform(digits.data)
+inversed = pca.inverse_transform(PC)
 sns.heatmap(inversed, cbar=False)
 ```
 
@@ -287,8 +288,8 @@ sns.heatmap(inversed, cbar=False)
 ```python
 # Heatmap 4
 pca = PCA(40)
-PC=pca.fit_transform(digits.data)
-inversed=pca.inverse_transform(PC)
+PC = pca.fit_transform(digits.data)
+inversed = pca.inverse_transform(PC)
 sns.heatmap(inversed, cbar=False)
 ```
 
@@ -428,25 +429,4 @@ www.scholarpedia.org
 [Principal Component Analysis (PCA) for Feature Selection and some of its Pitfalls](http://jotterbach.github.io/2016/03/24/Principal_Component_Analysis/)
 
 A typical approach in Data Science is what I call featurization of the Universe. What I mean by that is that we extract…
-jotterbach.github.io 
-
-<style>
-hr.section-divider:before {
-    --x-height-multiplier: 0.342;
-    --baseline-multiplier: 0.22;
-    font-family: medium-content-slab-serif-font,Georgia,Cambria,"Times New Roman",Times,serif;
-    font-weight: 400;
-    font-style: italic;
-    font-size: 30px;
-    letter-spacing: .6em;
-}
-
-hr.section-divider:before {
-    content: '...';
-    display: inline-block;
-    margin-left: .6em;
-    color: rgba(0,0,0,.68);
-    position: relative;
-    top: -30px;
-}
-</style>
+jotterbach.github.io
