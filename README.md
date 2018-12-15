@@ -15,12 +15,15 @@ Alright, better to implement PCA to get the image. Let’s start by making 5 *10
 
 <div style='display:flex'>
 <img src="img/matrix_x.png" style="width: 60%;">
+
 <span>
 ```python
 import numpy as np
 X = np.random.rand(5,10)
 ```
 </span>
+
+</div>
 <br />
 
 The column are variables (characteristics) and the row are samples(say, ‘cat’ or ‘dog’).
