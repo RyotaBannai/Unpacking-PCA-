@@ -9,7 +9,7 @@ Without further ado, let’s get right into it.
 First off, PCA is a dimensionality reduction method, more simply, the method for summarizing multiple of characteristics(variables) into few characteristics. Suppose, we attempt to classify, or identify new unknown animal as a ‘dog’ or a ‘cat’, you would need to measure the animal’s characteristics, such as ‘Height’ and ‘Weight’. We can also classify them as ‘color’, ‘shape’, ‘agility’… etc., however, the problem are that animals have tons of characteristics, so we cannot classify them more than three characteristics. More importantly, what if we have 100 *100 characteristics of animals. We cannot compute that much data, however, we can reduce the characteristics into fewer characteristics(known as Principle component), say two or three.
 
 ![PCA describe multiple variable with fewer Principal Components](img/pca_concept.png "PCA describe multiple variable with fewer Principal Components") 
-<img src="/RyotaBannai/Unpacking-PCA-/raw/master/img/pca_concept.png" alt="PCA describe multiple variable with fewer Principal Components" title="PCA describe multiple variable with fewer Principal Components" style="max-width:100%;">
+<img src="img/pca_concept.png" alt="PCA describe multiple variable with fewer Principal Components" title="PCA describe multiple variable with fewer Principal Components" style="max-width:100%;">
 <hr class="section-divider"></hr>
 Alright, better to implement PCA to get the image. Let’s start by making 5 *10 matrix, and take steps of the process.
 
