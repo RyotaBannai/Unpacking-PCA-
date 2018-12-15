@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" media="all" href="custom.css" />
+<link rel="stylesheet" type="text/css" href="custom.css">
 <hr class="section-divider"></hr>
 Despite the fact ample of resources for PCA(Principal component analysis) on the internet, it is intractable to grab whole idea within few hours, let alone implementing that into codes with knowing what we are actually doing. Having said that, we wish we could get the feeling that we can apply PCA into real cases quickly.
 
