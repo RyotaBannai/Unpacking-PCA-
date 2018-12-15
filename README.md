@@ -1,13 +1,15 @@
+<hr class="section-divider"></hr>
 Despite the fact ample of resources for PCA(Principal component analysis) on the internet, it is intractable to grab whole idea within few hours, let alone implementing that into codes with knowing what we are actually doing. Having said that, we wish we could get the feeling that we can apply PCA into real cases quickly.
 
 In this article, I’ll take a stab at and clearly illustrate the ideas one might find puzzling, which, I assume, that a newbie like me will fall for and stuck in for hours.
 
 Without further ado, let’s get right into it.
+<hr class="section-divider"></hr>
 
 First off, PCA is a dimensionality reduction method, more simply, the method for summarizing multiple of characteristics(variables) into few characteristics. Suppose, we attempt to classify, or identify new unknown animal as a ‘dog’ or a ‘cat’, you would need to measure the animal’s characteristics, such as ‘Height’ and ‘Weight’. We can also classify them as ‘color’, ‘shape’, ‘agility’… etc., however, the problem are that animals have tons of characteristics, so we cannot classify them more than three characteristics. More importantly, what if we have 100 *100 characteristics of animals. We cannot compute that much data, however, we can reduce the characteristics into fewer characteristics(known as Principle component), say two or three.
 
-
 ![PCA describe multiple variable with fewer Principal Components](img/pca_concept.png) 
+<hr class="section-divider"></hr>
 Alright, better to implement PCA to get the image. Let’s start by making 5 *10 matrix, and take steps of the process.
 
 
@@ -40,13 +42,15 @@ w, v = w[w_], v[:, w_]
 At this point, the eigenvectors is 10 *10 matrix. To perform dimensionality reduction from 10 variables to 2 variables, we truncate the matrix.
 ```
 
-
 ![10 *2 Eigenvectors (Principal components)](img/10x2_eigenvectors.png)
+
 ```python
 n=2;
 n_PC = v[:, 0:n]
 ```
+
 Then, we want to transform( project X on the principal axes) the original 10 *10 sample into new space (2 dimensions), we use the equation T=X W.
+
 ```python
 T=np.dot(X, n_PC)
 ```
@@ -64,7 +68,9 @@ w, v = LA.eig(C)
 ind = w.argsort()[::-1]
 w, v = w[ind], v[:, ind]
 ```
+
 (In this case, eigenvalues are two, therefore we actually don’t need to truncate it into two)
+
 ```python
 w_12 = w[:2]
 v_12 = v[:,:2]
@@ -80,12 +86,11 @@ plt.scatter(X_raw[:, 0], X_raw[:, 1], c='#663399', alpha=0.5)
 plt.scatter(X_mean[0], X_mean[1], c='red', s=50)
 plt.axis('equal')
 for length, vector in zip(w_12, v_12):
-vector[0] = -vector[0]               # Little tweak the sign 
-dir_ = vector * 3  * np.sqrt(length) # Standard Deviation 3
-start = X_mean; end = start + dir_
-arrowprops = dict(arrowstyle='->', linewidth=2, 
-shrinkA=0, shrinkB=0, color='red', alpha=0.5)
-ax.annotate('', xy = end, xytext = start, arrowprops=arrowprops)
+    vector[0] = -vector[0]               # Little tweak the sign 
+    dir_ = vector * 3  * np.sqrt(length) # Standard Deviation 3
+    start = X_mean; end = start + dir_
+    arrowprops = dict(arrowstyle='->', linewidth=2, shrinkA=0, shrinkB=0, color='red', alpha=0.5)
+    ax.annotate('', xy = end, xytext = start, arrowprops=arrowprops)
 ```
 
 ![Original sample plot(Fig. left) and plot eigenvectors(Fig. right)](img/statterplot_n_e_vectors.png)
@@ -109,11 +114,11 @@ ax.set_ylabel('Principal component 2')
 plt.scatter(T[:, 0], T[:, 1], c='#663399', alpha=0.5)
 plt.scatter(T_mean[0], T_mean[1], c='red', s=50)
 for length, vector in zip(w_12_T, v_12_T):
-dir_ = vector * 3  * np.sqrt(length)
-arrowprops = dict(arrowstyle='->', linewidth=2, shrinkA=0,    shrinkB=0, color='red', alpha=0.5)
-dir_[0] = -dir_[0]
-start = X_mean; end = start + dir_
-ax.annotate('', xy = end, xytext = start, arrowprops=arrowprops)
+    dir_ = vector * 3  * np.sqrt(length)
+    arrowprops = dict(arrowstyle='->', linewidth=2, shrinkA=0, shrinkB=0, color='red', alpha=0.5)
+    dir_[0] = -dir_[0]
+    start = X_mean; end = start + dir_
+    ax.annotate('', xy = end, xytext = start, arrowprops=arrowprops)
 ```
 
 ![Plot transformed sample data](img/plot_transformed_sampledata.png)
@@ -143,11 +148,10 @@ plt.scatter(X_raw[:, 0], X_raw[:, 1], c='#B8860B', alpha=0.5)
 plt.scatter(X_mean[0], X_mean[1], c='red', s=50)
 plt.axis('equal')
 for length, vector in zip(e_values, V):
-dir_ = -vector * 3  * np.sqrt(length) # Tweak the sign
-start = X_mean; end = start + dir_
-arrowprops = dict(arrowstyle='->',linewidth=2, 
-shrinkA=0, shrinkB=0, color='red', alpha=0.5)
-ax.annotate('', xy=end, xytext=start, arrowprops=arrowprops)
+    dir_ = -vector * 3  * np.sqrt(length) # Tweak the sign
+    start = X_mean; end = start + dir_
+    arrowprops = dict(arrowstyle='->',linewidth=2, shrinkA=0, shrinkB=0, color='red', alpha=0.5)
+    ax.annotate('', xy=end, xytext=start, arrowprops=arrowprops)
 ```
 ![PCA with SVD](img/pca_w_svd.png)
 From this results, we see exactly the same principal components by means of SVD and Eigendecomposition.
@@ -164,12 +168,12 @@ U_, s_, _ = LA.svd(np.cov(X, rowvar=False), full_matrices=False)
 angle = np.degrees(np.arctan2(U_[1,0], U_[0,0]))
 width, height = 2 * np.sqrt(s_)
 for nsig in range(1, 4):
-args = [X_mean, nsig*width, nsig*height, angle]
-kwargs = dict(color='#008000', edgecolor='k', alpha=nsig*0.1, linewidth=2, fill=False)
-ell = mpl.patches.Ellipse(*args, **kwargs)
-ell.set_clip_box(ax.bbox)
-ax.add_artist(ell)
-# Or ax.add_patch(Ellipse(*args,**kwargs)) instead
+    args = [X_mean, nsig*width, nsig*height, angle]
+    kwargs = dict(color='#008000', edgecolor='k', alpha=nsig*0.1, linewidth=2, fill=False)
+    ell = mpl.patches.Ellipse(*args, **kwargs)
+    ell.set_clip_box(ax.bbox)
+    ax.add_artist(ell)
+    # Or ax.add_patch(Ellipse(*args,**kwargs)) instead
 ```
 
 ![Equiprobability: ecliptic error circle](img/equiprobability.png)
@@ -204,11 +208,10 @@ plt.axis('equal')
 The rest of process is the same as before.
 ```python
 for length, vector in zip(pca.explained_variance_, pca.components_):
-dir_ = vector * 3  * np.sqrt(length)
-start = pca.mean_; end = start + dir_
-arrowprops = dict(arrowstyle='->',linewidth=2, 
-shrinkA=0, shrinkB=0, color='red', alpha=0.5)
-ax.annotate('', xy=end, xytext=start, arrowprops=arrowprops)
+    dir_ = vector * 3  * np.sqrt(length)
+    start = pca.mean_; end = start + dir_
+    arrowprops = dict(arrowstyle='->',linewidth=2, shrinkA=0, shrinkB=0, color='red', alpha=0.5)
+    ax.annotate('', xy=end, xytext=start, arrowprops=arrowprops)
 ```
 ![PCA with Scikit-learn version](img/e_vectors_scikit_learn.png)
 Not to mention, the result is the same.
@@ -226,7 +229,9 @@ from sklearn.datasets import load_digits
 digits = load_digits()
 pca = PCA(n_components=10).fit(digits.data)
 ```
+
 Now we can see how much these new 10 components can describe original sample data.
+
 ```python
 plt.plot(np.cumsum(pca.explained_variance_ratio_),'o-', c='#663399', alpha=.5)
 plt.xlabel('Number of components')
@@ -237,6 +242,7 @@ plt.ylabel('Cumulative explained variance')
 As it turns out, it described 72~73% of sample instead of using 64 dimensions that ensures 100% of accuracy. Notice that in the left graph the first component is index 0, that’s why the graph begins from 14~15% of variance.
 
 Suppose how many of components should be needed to get 90% of accuracy then? We can blank the PCA function and to plot the graph first.
+
 ```python
 pca = PCA().fit(digits.data) # Blank inside the closed bracket
 plt.plot(np.cumsum(pca.explained_variance_ratio_),'o-', c='#663399', alpha=.5)
@@ -295,8 +301,7 @@ _, axes = plt.subplots(2, 8, figsize=(8, 2),
 subplot_kw={'xticks':[], 'yticks':[]},
 gridspec_kw=dict(hspace=0.1, wspace=0.1))
 for i, ax in enumerate(axes.flat):
-ax.imshow(digits.data[i].reshape(8, 8),
-cmap='binary', interpolation='nearest', clim=(0, 16))
+    ax.imshow(digits.data[i].reshape(8, 8), cmap='binary', interpolation='nearest', clim=(0, 16))
 ```
 
 ![Digits from original sample](img/digit_originalsamples.png)
@@ -307,11 +312,11 @@ pca = PCA(2)
 PC = pca.fit_transform(digits.data)
 inversed = pca.inverse_transform(PC)
 _, axes = plt.subplots(4, 10, figsize=(10, 4), 
-subplot_kw={'xticks':[], 'yticks':[]},
-gridspec_kw=dict(hspace=0.1, wspace=0.1))
+                        subplot_kw={'xticks':[], 'yticks':[]},
+                        gridspec_kw=dict(hspace=0.1, wspace=0.1))
+
 for i, ax in enumerate(axes.flat):
-ax.imshow(inversed[i].reshape(8, 8),
-cmap='binary', interpolation='nearest', clim=(0, 16))
+    ax.imshow(inversed[i].reshape(8, 8), cmap='binary', interpolation='nearest', clim=(0, 16))
 ```
 
 ![Reconstructed digits images](img/digit_2pcs.png)
@@ -319,21 +324,25 @@ We can also apply PCA to Eigenfaces, since its feature is only brightness like d
 
 ```python
 from sklearn.datasets import fetch_lfw_people
+
 faces = fetch_lfw_people(min_faces_per_person=60)
 face_data_raw = faces.data
 average_face = face_data_raw.mean(axis=0)
 face_data = face_data_raw - average_face
+
 pca = PCA(100)
 pca.fit(face_data)
 PC = pca.transform(face_data)
 inversed = pca.inverse_transform(PC)
 inversed_faces = inversed + average_face
+
 fig, ax = plt.subplots(2, 5, figsize=(5, 2.5),
-subplot_kw={'xticks':[], 'yticks':[]},
-gridspec_kw=dict(hspace=0.1, wspace=0.1))
+                        subplot_kw={'xticks':[], 'yticks':[]},
+                        gridspec_kw=dict(hspace=0.1, wspace=0.1))
+
 for i in range(5, 10):
-ax[0, i-5].imshow(faces.data[i].reshape(62, 47), cmap='binary_r')
-ax[1, i-5].imshow(inversed_faces[i].reshape(62, 47), cmap='binary_r')
+    ax[0, i-5].imshow(faces.data[i].reshape(62, 47), cmap='binary_r')
+    ax[1, i-5].imshow(inversed_faces[i].reshape(62, 47), cmap='binary_r')
 ```
 
 ![Full dimension(Fig. above) and 100 dimensions(Fig. below)](img/reconstructed_faceimg_w_100dims_pca.png)
@@ -362,11 +371,11 @@ X = X + average_face
 Finally plot the images.
 ```python
 fig, ax = plt.subplots(2, 5, figsize=(5, 2.5),
-subplot_kw={'xticks':[], 'yticks':[]},
-gridspec_kw=dict(hspace=0.1, wspace=0.1))
+                        subplot_kw={'xticks':[], 'yticks':[]},
+                        gridspec_kw=dict(hspace=0.1, wspace=0.1))
 for i in range(5, 10):
-ax[0, i-5].imshow(faces.data[i].reshape(62,47), cmap='binary_r')
-ax[1, i-5].imshow(X[i].reshape(62,47), cmap='binary_r')
+    ax[0, i-5].imshow(faces.data[i].reshape(62,47), cmap='binary_r')
+    ax[1, i-5].imshow(X[i].reshape(62,47), cmap='binary_r')
 ```
 ![Reconstructed face images with SVD(Fig. below)](img/reconstructed_faceimg_w_svd.png)
 The resulting images are not as blur as the prior scikit-learn method. Seeming to be better method, the fewer data we use, the more clear projected images are. This is because less noises from samples, and the machine uses less filters. This will lead itself to predict low for new images, which the machine has never seen before.
@@ -375,12 +384,12 @@ Eigenvectors that composes these faces are called Eiganface, each Eigenvector ha
 
 ![The first five(most biggest) Eigenfaces](img/eigenfaces.png)
 ```python
-N=5
+N = 5
 fig, ax = plt.subplots(1, N, figsize=(5, 2.5),
-subplot_kw={'xticks':[], 'yticks':[]},
-gridspec_kw=dict(hspace=0.1, wspace=0.1))
+                        subplot_kw={'xticks':[], 'yticks':[]},
+                        gridspec_kw=dict(hspace=0.1, wspace=0.1))
 for i in range(1, N+1):
-ax[i-1].imshow(Vt[i].reshape(62, 47), cmap='binary_r')
+    ax[i-1].imshow(Vt[i].reshape(62, 47), cmap = 'binary_r')
 ```
 ![Average face](img/averageface.png)
 The average face is a foundation of face images.
@@ -389,7 +398,9 @@ Here is the overview of SVD’s process for Eigenface.
 
 ![SVD overview](img/overview_of_svd_process.png)
 
-#### Reference
+<hr class="section-divider"></hr>
+
+### Reference
 
 [Relationship between SVD and PCA. How to use SVD to perform PCA?](https://stats.stackexchange.com/questions/134282/relationship-between-svd-and-pca-how-to-use-svd-to-perform-pca/)
 
@@ -418,3 +429,24 @@ www.scholarpedia.org
 
 A typical approach in Data Science is what I call featurization of the Universe. What I mean by that is that we extract…
 jotterbach.github.io 
+
+<style>
+hr.section-divider:before {
+    --x-height-multiplier: 0.342;
+    --baseline-multiplier: 0.22;
+    font-family: medium-content-slab-serif-font,Georgia,Cambria,"Times New Roman",Times,serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 30px;
+    letter-spacing: .6em;
+}
+
+hr.section-divider:before {
+    content: '...';
+    display: inline-block;
+    margin-left: .6em;
+    color: rgba(0,0,0,.68);
+    position: relative;
+    top: -30px;
+}
+</style>
