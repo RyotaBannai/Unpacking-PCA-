@@ -11,7 +11,7 @@ PCA describe multiple variable with fewer Principal Components
 Alright, better to implement PCA to get the image. Let’s start by making 5 *10 matrix, and take steps of the process.
 
 
-![Matrix X](img/matrixX.png) 
+![Matrix X](img/matrix_x.png) 
 <br />
 import numpy as np
 X = np.random.rand(5,10)
